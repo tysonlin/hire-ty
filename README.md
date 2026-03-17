@@ -62,6 +62,32 @@ typst --version
 
 This repository is designed to be used with an AI coding agent (e.g. GitHub Copilot Workspace, Claude, GPT-4, or any agent that can read files and follow instructions). No specific platform is required — the agent instructions are plain Markdown files that any capable model can follow.
 
+### 4. (Optional) Set up PII Detection Pre-Commit Hook
+
+To protect your personal information from being accidentally committed to Git, you can optionally set up an AI-powered pre-commit hook that scans for PII before each commit.
+
+**This is completely optional** — your code will work fine without it. But if you're sharing this repo or want an extra safety layer, follow these steps:
+
+```bash
+# 1. Ensure Python 3 is installed
+# macOS: brew install python3
+# Linux: sudo apt install python3
+# Windows: https://www.python.org/downloads/
+
+# 2. Copy the example configuration
+cp .env.example .env
+
+# 3. Edit .env and add your API key (Anthropic or OpenAI)
+nano .env
+
+# 4. Install the required Python package
+pip install anthropic  # or: pip install openai
+```
+
+That's it! The hook is already installed. On your next commit, it will scan for PII and block the commit if any is detected.
+
+For full details, see **`.githooks/README.md`**.
+
 ---
 
 ## How to apply for a job

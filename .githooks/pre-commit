@@ -1,0 +1,18 @@
+#!/bin/bash
+# Pre-commit hook - PII Detection Check
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+# Check if Python 3 is installed
+if ! command -v python3 &> /dev/null; then
+    echo "⚠️  PII Detection is not available"
+    echo "   Python 3 is not installed"
+    echo "   Install Python 3 to enable PII checks"
+    echo ""
+    echo "✅ Commit allowed (PII check skipped)"
+    exit 0
+fi
+
+# Run the PII check
+python3 "$HOOK_DIR/pre-commit-pii-check.py"
