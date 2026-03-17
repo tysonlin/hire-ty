@@ -111,12 +111,12 @@ And populate it with:
 | File | Contents |
 |------|----------|
 | `job-description.md` | Structured summary of the JD |
-| `cv.typ` | Typst source for your tailored CV |
+| `cv.typ` | Typst source for your tailored CV - this should be generated per job position |
 | `cover-letter.md` | Tailored cover letter in email format |
 
 ### Step 3 — Run the sub-agent pipeline
 
-The agent runs these sub-agents in order, then the Conflict Resolver finalises the output:
+The agent runs these sub-agents in order, then the Conflict Resolver finalises the output. The output for these subagents should be stored at each job folder under `/jobs/*/analysis/`:
 
 | # | Sub-agent | What it does |
 |---|-----------|-------------|
