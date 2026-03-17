@@ -1,6 +1,7 @@
 *
 !.gitignore
 !README.md
+!profile.example.md
 
 # Personal data - keep out of version control
 profile.md
