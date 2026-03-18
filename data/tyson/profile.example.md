@@ -1,4 +1,5 @@
-# Tyson Lin — Professional Profile
+# Tyson Lin — Professional Profile (Example)
+<!-- Ignore this file, keeping as example only so I can keep personal stuff off of Git -->
 
 > **Instructions for Tyson:** Fill in every section below with accurate, factual information.
 > This file is the single source of truth for all CV and cover letter generation.

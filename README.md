@@ -19,6 +19,8 @@ hire-ty/
 ├── constraints/
 │   └── content-guidelines.md  # Content rules all output must follow
 ├── subagents/            # Instructions for each specialised agent
+│   ├── fact-checker.md
+│   ├── think-like-tyson.md
 │   ├── ats-analyzer.md
 │   ├── keyword-gap-agent.md
 │   ├── impact-quantifier.md
@@ -116,15 +118,26 @@ And populate it with:
 
 ### Step 3 — Run the sub-agent pipeline
 
-The agent runs these sub-agents in order, then the Conflict Resolver finalises the output. The output for these subagents should be stored at each job folder under `/jobs/*/analysis/`:
+The agent runs these sub-agents in sequence. All agent output should be stored in `/jobs/*/analysis/`. The pipeline runs in three phases:
 
+**Phase 1: Critical Quality Gates** (must pass before proceeding)
 | # | Sub-agent | What it does |
 |---|-----------|-------------|
-| 1 | ATS Analyzer | Checks keyword coverage and format compatibility |
-| 2 | Keyword Gap Agent | Finds semantic mismatches between your profile and the JD |
-| 3 | Impact Quantifier | Rewrites weak bullets into quantified achievements |
-| 4 | Tone Optimizer | Aligns writing style with the role's seniority and company culture |
-| 5 | Conflict Resolver | Resolves any contradictions and produces the final documents |
+| 1 | Fact Checker | Verifies all claims against your profile (`/data/tyson/profile.md`). If it flags issues, the pipeline halts for corrections. |
+| 2 | Think Like Tyson | Ensures the document reflects your authentic voice and personal guidelines. If misaligned, the pipeline halts for revision. |
+
+**Phase 2: Functional Improvements** (only if Phase 1 passes)
+| # | Sub-agent | What it does |
+|---|-----------|-------------|
+| 3 | ATS Analyzer | Checks keyword coverage and format compatibility |
+| 4 | Keyword Gap Agent | Finds semantic mismatches between your profile and the JD |
+| 5 | Impact Quantifier | Rewrites weak bullets into quantified achievements |
+| 6 | Tone Optimizer | Aligns writing style with the role's seniority and company culture |
+
+**Phase 3: Final Arbitration** (only if Phases 1 & 2 complete)
+| # | Sub-agent | What it does |
+|---|-----------|-------------|
+| 7 | Conflict Resolver | Resolves contradictions between agents and produces final CV and cover letter |
 
 ### Step 4 — Compile the CV
 
