@@ -25,7 +25,8 @@ hire-ty/
 │   ├── keyword-gap-agent.md
 │   ├── impact-quantifier.md
 │   ├── tone-optimizer.md
-│   └── conflict-resolver.md
+│   ├── conflict-resolver.md
+│   └── change-composer.md
 ├── Typst.md              # How to install Typst and compile CVs
 └── README.md             # This file
 ```
@@ -118,7 +119,7 @@ And populate it with:
 
 ### Step 3 — Run the sub-agent pipeline
 
-The agent runs these sub-agents in sequence. All agent output should be stored in `/jobs/*/analysis/`. The pipeline runs in three phases:
+The agent runs these sub-agents in sequence. All agent output should be stored in `/jobs/*/analysis/`. The pipeline runs in four phases:
 
 **Phase 1: Critical Quality Gates** (must pass before proceeding)
 | # | Sub-agent | What it does |
@@ -137,22 +138,41 @@ The agent runs these sub-agents in sequence. All agent output should be stored i
 **Phase 3: Final Arbitration** (only if Phases 1 & 2 complete)
 | # | Sub-agent | What it does |
 |---|-----------|-------------|
-| 7 | Conflict Resolver | Resolves contradictions between agents and produces final CV and cover letter |
+| 7 | Conflict Resolver | Resolves contradictions between agents and recommends final changes (does not modify files directly) |
 
-### Step 4 — Compile the CV
+**Phase 4: Change Composition** (only if Phase 3 complete)
+| # | Sub-agent | What it does |
+|---|-----------|-------------|
+| 8 | Change Composer | Drafts proposed CV and cover letter with all recommended changes applied; generates PDF for visual review |
+
+### Step 4 — Review Proposed Changes
+
+The Change Composer generates proposed files in the `analysis/` folder:
+
+| File | Purpose |
+|------|---------|
+| `analysis/proposed-cv.typ` | Full CV with recommended changes applied |
+| `analysis/proposed-cv.pdf` | Compiled PDF of proposed CV for visual review |
+| `analysis/proposed-cover-letter.md` | Full cover letter with recommended changes applied |
+| `analysis/change-summary.md` | Clear summary of what changed and why |
+
+Review these proposed files and decide:
+- **Approve** — Apply all changes to actual `cv.typ` and `cover-letter.md`
+- **Request modifications** — Ask for specific iterations before applying
+- **Reject** — Keep current versions unchanged
+
+### Step 5 — Compile and Submit
+
+Once you approve the changes:
 
 ```bash
 cd "jobs/<Company Name> - <Job Title> - <City>, <Country>"
+# Copy approved changes from proposed files
+cp analysis/proposed-cv.typ cv.typ
+cp analysis/proposed-cover-letter.md cover-letter.md
+# Recompile the final PDF
 typst compile cv.typ cv.pdf
 ```
-
-See `Typst.md` for full details including watch mode and the VS Code extension.
-
-### Step 5 — Review and send
-
-- Open `cv.pdf` and `cover-letter.md`.
-- Check for any `[TODO: ...]` placeholders and fill them in.
-- Send!
 
 ---
 

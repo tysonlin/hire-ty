@@ -93,6 +93,8 @@ These drafts will be refined by the sub-agent pipeline. Ensure they:
 
 **All content generated from Steps 1-3 must now be validated and optimized through this pipeline.**
 
+**⚠️ IMPORTANT: All subagent outputs MUST be saved to the `analysis/` subfolder only. Do NOT create extra files (with ALL CAPS names) in the main job folder. Each subagent generates one report (.md file) that goes directly into `analysis/`. No additional documentation or summary files should be created in the job root directory.**
+
 ##### Phase 1: Critical Quality Gates (Run FIRST)
 
 **These agents validate the draft. If they fail, the pipeline halts immediately.**
@@ -101,6 +103,7 @@ These drafts will be refined by the sub-agent pipeline. Ensure they:
    - INPUT: CV draft, cover letter draft, `/data/tyson/profile.md`
    - TASK: Verify every claim against the profile
    - OUTPUT: Report showing ✅ PASS, ⚠️ CONDITIONAL PASS, or 🛑 BLOCKED
+   - **Save output to:** `analysis/fact-checker-report.md`
    - **IF 🛑 BLOCKED:** Stop. Return failed claims to Tyson for profile updates. Do not proceed.
    - **IF ✅ PASS or ⚠️ CONDITIONAL PASS:** Proceed to next gate.
 
@@ -108,6 +111,7 @@ These drafts will be refined by the sub-agent pipeline. Ensure they:
    - INPUT: CV draft, cover letter draft, `/constraints/think-like-tyson.md`
    - TASK: Ensure the document reflects Tyson's authentic voice and personal mandate
    - OUTPUT: Report showing ✅ ALIGNED, ⚠️ PARTIALLY ALIGNED, or 🛑 MISALIGNED
+   - **Save output to:** `analysis/think-like-tyson-report.md`
    - **IF 🛑 MISALIGNED:** Stop. Return for voice/tone/structure revision. Do not proceed.
    - **IF ✅ ALIGNED or ⚠️ PARTIALLY ALIGNED:** Proceed to Phase 2.
 
@@ -120,18 +124,22 @@ These drafts will be refined by the sub-agent pipeline. Ensure they:
 3. **ATS Analyzer Agent** (`subagents/ats-analyzer.md`)
    - TASK: Check keyword coverage and format compatibility with ATS systems
    - OUTPUT: Keyword coverage score, format issues, recommended additions
+   - **Save output to:** `analysis/ats-score-[company].md`
 
 4. **Keyword Gap Agent** (`subagents/keyword-gap-agent.md`)
    - TASK: Find semantic mismatches between Tyson's profile and the job description
    - OUTPUT: Missing keywords, profile gaps, suggested additions
+   - **Save output to:** `analysis/keyword-gap-analysis-[company].md`
 
 5. **Impact Quantifier Agent** (`subagents/impact-quantifier.md`)
    - TASK: Rewrite weak or vague bullets into quantified, measurable achievements
    - OUTPUT: Improved bullet points with metrics and impact
+   - **Save output to:** `analysis/impact-quantification-[company].md`
 
 6. **Tone Optimizer Agent** (`subagents/tone-optimizer.md`)
    - TASK: Align writing style with the role's seniority level and company culture
    - OUTPUT: Tone-adjusted CV and cover letter
+   - **Save output to:** `analysis/tone-optimization-[company].md`
 
 ---
 
@@ -141,35 +149,63 @@ These drafts will be refined by the sub-agent pipeline. Ensure they:
    - INPUT: Updated drafts + all agent reports
    - TASK: Resolve conflicts between agent recommendations, prioritizing Fact Checker and Think Like Tyson findings
    - OUTPUT: 
-     - **Final CV content** (ready for Typst compilation)
-     - **Final cover letter** (ready to send)
-     - **Conflict resolution log** (which recommendations were accepted/rejected and why)
-     - **Outstanding TODOs** (items Tyson must fill in manually)
+     - **Conflict resolution report** (which changes are recommended, which are rejected, and why) — save to `analysis/conflict-resolver-report.md`
+     - **List of proposed changes** (detailed recommendations for CV and cover letter, but DO NOT apply them to actual files)
+     - **Outstanding TODOs** (if any, note in conflict resolution report)
+
+##### Phase 4: Change Composer (Only if Phase 3 complete)
+
+8. **Change Composer Agent** (`subagents/change-composer.md`)
+   - INPUT: Current CV and cover letter + Conflict Resolver report with proposed changes
+   - TASK: Draft the proposed changes as complete file versions showing what CV and cover letter would look like if changes are applied, and compile the proposed CV to PDF
+   - OUTPUT:
+     - **`analysis/proposed-cv.typ`** — Full CV content with all recommended changes applied (for user review)
+     - **`analysis/proposed-cv.pdf`** — Compiled PDF of the proposed CV (for user review)
+     - **`analysis/proposed-cover-letter.md`** — Full cover letter with all recommended changes applied (for user review)
+     - **`analysis/change-summary.md`** — Clear summary of what changed and why (for user decision-making)
 
 ---
 
-#### Step 5: Compile the CV to PDF
+**Output Organization + Step 4:**
+- 6 subagents generate 6 reports + Phase 4 proposer:
+  1. Fact Checker → `analysis/fact-checker-report.md`
+  2. Think Like Tyson → `analysis/think-like-tyson-report.md`
+  3. ATS Analyzer → `analysis/ats-score-[company].md`
+  4. Keyword Gap Agent → `analysis/keyword-gap-analysis-[company].md`
+  5. Impact Quantifier → `analysis/impact-quantification-[company].md`
+  6. Tone Optimizer → `analysis/tone-optimization-[company].md`
+  7. Conflict Resolver → `analysis/conflict-resolver-report.md` (recommendations only, no file modifications)
+  8. Change Composer → `analysis/proposed-cv.typ`, `analysis/proposed-cv.pdf`, `analysis/proposed-cover-letter.md`, `analysis/change-summary.md`
+- All outputs go **directly into `analysis/` subfolder**
+- Conflict Resolver and Change Composer do NOT modify actual `cv.typ` or `cover-letter.md` files
+- User reviews proposed changes before any files are modified
+- The `analysis/` folder is for reference, audit trail, and change proposals only
 
-Once the Conflict Resolver produces the final CV content:
+---
+
+#### Step 5: Review Proposed Changes
+
+Once the Change Composer generates the proposed files:
+
+- Review `analysis/change-summary.md` to understand what would change
+- Review `analysis/proposed-cv.pdf` for visual layout and `analysis/proposed-cv.typ` / `analysis/proposed-cover-letter.md` for full content
+- Compare with current `cv.typ` and `cover-letter.md` to verify changes
+- Decide: approve changes, request modifications, or keep current versions
+
+#### Step 6: Apply Approved Changes (If User Approves)
+
+If Tyson approves the proposed changes:
 
 ```bash
-cd "jobs/<Company Name> - <Job Title> - <City>, <Country>"
-typst compile cv.typ cv.pdf
+cp "jobs/<Company Name> - <Job Title> - <City>, <Country>/analysis/proposed-cv.typ" \
+   "jobs/<Company Name> - <Job Title> - <City>, <Country>/cv.typ"
+cp "jobs/<Company Name> - <Job Title> - <City>, <Country>/analysis/proposed-cover-letter.md" \
+   "jobs/<Company Name> - <Job Title> - <City>, <Country>/cover-letter.md"
 ```
 
-Verify the PDF renders correctly. If there are errors, check `Typst.md` for troubleshooting.
+Then compile PDF: `typst compile cv.typ cv.pdf`
 
-#### Step 6: Review and Finalize
-
-- Open `cv.pdf` and `cover-letter.md`
-- Search for any `[TODO: ...]` placeholders
-- Fill in any missing information
-- Review for correctness and alignment with the job
-
-#### Step 7: Submit
-
-- Send the CV (as PDF) and cover letter (as plain text or email body)
-- Record submission details in the job folder for future reference
+#### Step 7: Final Review
 
 ---
 
@@ -269,13 +305,19 @@ User provides job description
     ├─ Phase 1: Fact Checker → Think Like Tyson [QUALITY GATES]
     │   └─ If either fails: HALT and return for corrections
     ├─ Phase 2: ATS → Keywords → Impact → Tone [FUNCTIONAL IMPROVEMENTS]
-    └─ Phase 3: Conflict Resolver [FINAL ARBITRATION]
+    ├─ Phase 3: Conflict Resolver [ARBITRATION - recommends changes only]
+    └─ Phase 4: Change Composer [DRAFTS proposed changes + PDF without applying]
          ↓
-[Step 5] Compile CV to PDF with Typst
+[Step 5] Review proposed changes in analysis/ folder
          ↓
-[Step 6] Review final documents for TODOs and correctness
+    User decision:
+    ├─ Approve → [Step 6] Apply changes to cv.typ and cover-letter.md
+    ├─ Request modifications → Iterate with agents
+    └─ Reject → Keep current versions
          ↓
-[Step 7] Submit
+[Step 6 or 7] Compile CV to PDF with Typst
+         ↓
+[Step 7 or 8] Final review and submit
 ```
 
 ---
@@ -285,8 +327,10 @@ User provides job description
 - **Always start with Fact Checker and Think Like Tyson.** These are non-negotiable quality gates.
 - **If Fact Checker halts:** Do not run any other agents. Return immediately for profile/document corrections.
 - **If Think Like Tyson halts:** Do not proceed to functional agents. Fix voice and structure first.
+- **Conflict Resolver only recommends changes.** It does NOT modify cv.typ or cover-letter.md. Changes are drafted by Change Composer for user approval.
+- **Change Composer drafts proposed versions and PDF.** User reviews in the analysis/ folder before approving.
 - **Be transparent about failures.** If a constraint is violated, explain which rule was broken and what needs to change.
 - **Respect Tyson's authentic voice.** Never oversell, never use banned words, never force corporate jargon.
-- **Document decisions.** When the Conflict Resolver accepts or rejects recommendations, explain why.
+- **Document decisions.** When the Conflict Resolver and Change Composer make recommendations, explain why.
 
 Good luck getting Tyson hired! 🚀
