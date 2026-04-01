@@ -36,7 +36,7 @@ Failure to comply with these constraints is a critical error that will be caught
 
 ### When Tyson says: "Help me apply for [job link/description]"
 
-Follow these steps in order:
+Follow these steps in order to create initial drafts:
 
 #### Step 1: Parse the Job Description
 
@@ -84,14 +84,24 @@ Create initial drafts based on:
 - The job description
 - The role's seniority level and company culture
 
-These drafts will be refined by the sub-agent pipeline. Ensure they:
-- Include relevant experience for this specific role
-- Reflect Tyson's authentic voice (measured, humble but prideful)
-- Follow basic formatting from `constraints/think-like-tyson.md`
+These drafts should be:
+- Relevant to the specific role
+- Reflecting Tyson's authentic voice (measured, humble but prideful)
+- Following basic formatting from `constraints/think-like-tyson.md`
 
-#### Step 4: Run the Three-Phase Sub-Agent Pipeline
+At this point, the initial application is complete. The drafts are ready for review and submission as-is, **or** Tyson can request optimization through the sub-agent pipeline (see below).
 
-**All content generated from Steps 1-3 must now be validated and optimized through this pipeline.**
+---
+
+## Running the Sub-Agent Pipeline
+
+### When Tyson says: "Run the sub-agent pipeline for [job folder name]"
+
+Execute the optimization pipeline on existing job application drafts. This validates and refines the CV and cover letter through specialized agents.
+
+#### Pipeline: Run the Four-Phase Sub-Agent Pipeline
+
+**All content in the specified job folder will be validated and optimized through this pipeline.**
 
 **⚠️ IMPORTANT: All subagent outputs MUST be saved to the `analysis/` subfolder only. Do NOT create extra files (with ALL CAPS names) in the main job folder. Each subagent generates one report (.md file) that goes directly into `analysis/`. No additional documentation or summary files should be created in the job root directory.**
 
@@ -183,7 +193,7 @@ These drafts will be refined by the sub-agent pipeline. Ensure they:
 
 ---
 
-#### Step 5: Review Proposed Changes
+#### After Pipeline: Review Proposed Changes
 
 Once the Change Composer generates the proposed files:
 
@@ -192,7 +202,7 @@ Once the Change Composer generates the proposed files:
 - Compare with current `cv.typ` and `cover-letter.md` to verify changes
 - Decide: approve changes, request modifications, or keep current versions
 
-#### Step 6: Apply Approved Changes (If User Approves)
+#### After Pipeline: Apply Approved Changes (If User Approves)
 
 If Tyson approves the proposed changes:
 
@@ -205,7 +215,7 @@ cp "jobs/<Company Name> - <Job Title> - <City>, <Country>/analysis/proposed-cove
 
 Then compile PDF: `typst compile cv.typ cv.pdf`
 
-#### Step 7: Final Review
+#### After Pipeline: Final Review
 
 ---
 
@@ -217,13 +227,35 @@ You will:
 
 1. **Locate the job folder** under `jobs/`
 2. **Reference the job description** and Tyson's profile
-3. **Generate `interview-prep.md`** containing:
-   - **Role-specific likely questions** (based on job description and seniority)
-   - **Suggested answers** (based on Tyson's experience from profile)
-   - **Questions for the interviewer** (insightful, role-specific)
-   - **Company research** (culture, recent news, market position)
-   - **Technical deep dives** (if the role is technical)
-   - **Note-taking template** for the actual interview
+3. **Conduct deep research on the company** including:
+   - Recent news, funding rounds, strategic initiatives, and market positioning
+   - Competitors and the company's competitive advantages
+   - Organizational structure, key decision-makers, and team dynamics
+   - Known challenges, pain points, and strategic priorities
+   - Company culture signals from public information (LinkedIn, Glassdoor, company website)
+4. **Identify industry-specific knowledge** relevant to the role:
+   - Key trends, challenges, and emerging technologies in the industry
+   - Regulatory environment or compliance considerations
+   - Market dynamics and customer pain points the company addresses
+   - Technical or domain expertise that would be valuable to the role
+   - What Tyson should study or refresh before the interview
+5. **Map Tyson's existing experience** to the company and role:
+   - Identify which past projects and achievements are most relevant
+   - Find parallels between Tyson's previous work and the company's challenges
+   - Highlight transferable skills and domain knowledge
+   - Note any gaps in experience and how Tyson's broader strengths compensate
+6. **Generate `interview-prep.md`** containing:
+   - **Company deep-dive** (funding, strategy, competitors, recent news, culture signals)
+   - **Industry context** (key trends, challenges, regulatory environment, market dynamics)
+   - **Role-specific knowledge requirements** (technical stack, domain expertise, industry standards)
+   - **Experience mapping** (which of Tyson's projects/skills relate to company challenges)
+   - **Role-specific likely questions** (based on job description, seniority level, and company strategy)
+   - **Suggested answers** (based on Tyson's experience from profile, connected to company context)
+   - **Questions for the interviewer** (insightful, role-specific, showing meaningful research)
+   - **Knowledge gaps and prep priorities** (what to study during prep time, suggested resources)
+   - **Technical deep dives** (if the role is technical—specific technologies, architectures, or patterns used by the company)
+   - **Talking points** (how Tyson's experience directly addresses the company's known challenges)
+   - **Note-taking template** (for the actual interview, with space for observations on culture fit)
 
 ---
 
@@ -292,8 +324,10 @@ Rerun the sub-agent pipeline for [job folder name]
 
 ## Workflow Summary
 
+### Application Workflow
+
 ```
-User provides job description
+User: "Help me apply for [job description]"
          ↓
 [Step 1] Parse & structure job description
          ↓
@@ -301,23 +335,35 @@ User provides job description
          ↓
 [Step 3] Generate initial CV and cover letter drafts
          ↓
-[Step 4] Run sub-agent pipeline:
-    ├─ Phase 1: Fact Checker → Think Like Tyson [QUALITY GATES]
-    │   └─ If either fails: HALT and return for corrections
-    ├─ Phase 2: ATS → Keywords → Impact → Tone [FUNCTIONAL IMPROVEMENTS]
-    ├─ Phase 3: Conflict Resolver [ARBITRATION - recommends changes only]
-    └─ Phase 4: Change Composer [DRAFTS proposed changes + PDF without applying]
+[Complete] Review drafts and choose:
+    ├─ Submit as-is
+    └─ OR request: "Run the sub-agent pipeline for [job]"
+```
+
+### Sub-Agent Pipeline Workflow
+
+```
+User: "Run the sub-agent pipeline for [job folder name]"
          ↓
-[Step 5] Review proposed changes in analysis/ folder
+[Phase 1] Fact Checker → Think Like Tyson [QUALITY GATES]
+    └─ If either fails: HALT and return for corrections
+         ↓
+[Phase 2] ATS → Keywords → Impact → Tone [FUNCTIONAL IMPROVEMENTS]
+         ↓
+[Phase 3] Conflict Resolver [ARBITRATION - recommends changes only]
+         ↓
+[Phase 4] Change Composer [DRAFTS proposed changes + PDF]
+         ↓
+Review proposed changes in analysis/ folder
          ↓
     User decision:
-    ├─ Approve → [Step 6] Apply changes to cv.typ and cover-letter.md
+    ├─ Approve → Apply changes to cv.typ and cover-letter.md
     ├─ Request modifications → Iterate with agents
     └─ Reject → Keep current versions
          ↓
-[Step 6 or 7] Compile CV to PDF with Typst
+Compile CV to PDF with Typst
          ↓
-[Step 7 or 8] Final review and submit
+Final review and submit
 ```
 
 ---

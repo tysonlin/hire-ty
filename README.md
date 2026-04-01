@@ -117,7 +117,21 @@ And populate it with:
 | `cv.typ` | Typst source for your tailored CV - this should be generated per job position |
 | `cover-letter.md` | Tailored cover letter in email format |
 
-### Step 3 — Run the sub-agent pipeline
+### Step 3 — Review Initial Drafts
+
+The agent has now created:
+- `cv.typ` — Initial tailored CV (not yet optimized)
+- `cover-letter.md` — Initial tailored cover letter (not yet optimized)
+
+You can review these drafts and either submit as-is, or proceed to Step 4 to optimize them through the sub-agent pipeline.
+
+### Step 4 — (Optional) Run the sub-agent pipeline
+
+When you're ready to optimize the drafts, ask the agent:
+
+```
+Run the sub-agent pipeline for [job folder name]
+```
 
 The agent runs these sub-agents in sequence. All agent output should be stored in `/jobs/*/analysis/`. The pipeline runs in four phases:
 
@@ -145,7 +159,7 @@ The agent runs these sub-agents in sequence. All agent output should be stored i
 |---|-----------|-------------|
 | 8 | Change Composer | Drafts proposed CV and cover letter with all recommended changes applied; generates PDF for visual review |
 
-### Step 4 — Review Proposed Changes
+### Step 5 — Review Proposed Changes
 
 The Change Composer generates proposed files in the `analysis/` folder:
 
@@ -161,7 +175,7 @@ Review these proposed files and decide:
 - **Request modifications** — Ask for specific iterations before applying
 - **Reject** — Keep current versions unchanged
 
-### Step 5 — Compile and Submit
+### Step 6 — Compile and Submit
 
 Once you approve the changes:
 
