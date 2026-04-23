@@ -38,7 +38,6 @@ Create `application.typ` in the job folder using this structure:
 #set par(leading: 0.75em, spacing: 1.2em)
 
 // Cover letter content in Typst markup:
-// - Contact line: email \ and phone \ using backslash line breaks
 // - #v(1em) spacer before salutation
 // - Paragraphs separated by blank lines
 // - #v(1em) before sign-off block
