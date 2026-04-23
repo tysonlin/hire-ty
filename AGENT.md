@@ -52,6 +52,7 @@ Follow these steps in order to create initial drafts:
   - **Seniority level** (junior, mid, senior, staff, etc.)
   - **Company culture signals** (formal, startup, values-driven, etc.)
 - Save this as `job-description.md` in a new job folder (see Step 2)
+- Ensure that the chat session name has company name on it eg. "Job application for [Company name] ..."
 
 #### Step 2: Create the Job Folder Structure
 
