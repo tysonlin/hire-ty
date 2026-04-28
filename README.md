@@ -204,6 +204,67 @@ The agent will create `interview-prep.md` inside the job folder with:
 
 ---
 
+## Research functionality
+
+Research specific topics related to your job application to gain deeper context for interviews.
+
+### How to request research
+
+Ask the agent:
+
+```
+Research [topic] for [job folder name]
+```
+
+For example:
+- `Research distributed systems architecture for [Company]`
+- `Research financial services compliance for [Company]`
+- `Research real-time data processing patterns for [Company]`
+
+### What the agent creates
+
+The agent conducts internet research and creates:
+
+**`research/[topic]-research.md`**
+
+Contains:
+- **Overview** — High-level summary of the topic in simple, concise language
+- **Key Concepts** — Main ideas relevant to the role and company
+- **Industry Context** — How the topic fits into the broader industry
+- **Company Relevance** — How this topic applies to the company's business or role
+- **Connection to Your Experience** — Parallels with your profile and past projects
+- **Expected Knowledge & Behaviors** — What the company expects someone in this role to understand
+- **Key Takeaways** — Core insights you should be ready to discuss
+- **Glossary** — Industry/domain-specific terms and acronyms
+- **External References** — All sources and links used
+
+### Why research helps
+
+Research reports:
+- Provide deeper context for interviews and conversations
+- Help you articulate connections between your experience and the role's requirements
+- Identify gaps you should refresh before speaking with the company
+- Give you concrete talking points that show genuine interest
+- Build confidence when discussing technical or domain-specific topics
+
+### Research + Interview Prep
+
+When you generate interview prep after completing research:
+
+```
+Generate interview prep for [job folder name]
+```
+
+The agent will automatically:
+- Incorporate your research findings into suggested answers
+- Reference research context when explaining expected knowledge
+- Build talking points around your research insights
+- Flag research topics as areas you're well-prepared to discuss
+
+Research is **separate from** interview prep but works together with it.
+
+---
+
 ## Content rules
 
 All generated content must comply with the rules in `constraints/content-guidelines.md`:

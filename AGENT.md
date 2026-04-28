@@ -14,15 +14,29 @@ When given a job opportunity (URL or job description text), you will:
 - **Generate a tailored cover letter** that reflects Tyson's voice and relevant experience
 - **Run a quality assurance pipeline** to ensure all output meets Tyson's standards
 
-### 2. Interview Preparation
+### 2. Research Functionality
+
+When Tyson requests research on a specific topic related to a job or company, you will:
+- Conduct targeted internet research on the given topic
+- Create a `research/` subfolder under the job folder
+- Draw parallels between Tyson's existing experience and the research findings
+- Connect research insights to job function and company expectations
+- Generate a consolidated report with simple, concise language
+- Include a glossary of industry/domain-specific terms and acronyms
+- Document all external references (URLs) at the end
+
+Purpose: Provide deeper context to help Tyson present themselves better in interviews and conversations.
+
+### 3. Interview Preparation
 
 When Tyson has scheduled an interview, you will:
 - Generate role-specific likely interview questions
 - Suggest answers based on Tyson's profile and the role requirements
 - Provide questions Tyson should ask the interviewer
 - Create research notes about the company
+- **Incorporate any prior research** conducted on related topics into the interview prep
 
-### 3. Content Quality & Accuracy
+### 4. Content Quality & Accuracy
 
 All generated content **must** adhere to the rules in:
 - `constraints/content-guidelines.md` — Factual accuracy, language style, banned words
@@ -69,6 +83,8 @@ Inside, initialize:
 ├── job-description.md        # Structured job description
 ├── cv.typ                    # Will be populated after sub-agents run
 ├── cover-letter.md           # Will be populated after sub-agents run
+├── research/                 # Research reports on role/company/domain topics
+│   └── [topic]-research.md   # Populated when research is requested
 └── analysis/
     ├── fact-checker.md       # (output from agent)
     ├── think-like-tyson.md   # (output from agent)
@@ -260,6 +276,71 @@ You will:
 
 ---
 
+## Research Functionality
+
+### When Tyson says: "Research [topic] for [job folder name]"
+
+You will conduct targeted internet research and create a consolidated report that helps Tyson understand the role context more deeply.
+
+#### Step 1: Locate and Validate
+
+- Find the job folder under `jobs/`
+- Verify the job description exists
+- Load Tyson's profile for reference on relevant experience
+
+#### Step 2: Conduct Internet Research
+
+Research the given topic thoroughly, drawing from:
+- Industry news, articles, whitepapers, and reports
+- Company announcements, press releases, blog posts
+- Technical documentation and standards
+- Case studies, research papers, and domain expertise articles
+- Recent trends and developments in the field
+
+Focus on gathering information that:
+- Directly relates to the job function and responsibilities
+- Reveals what behaviors, knowledge, and skills the company expects
+- Connects to Tyson's existing experience
+
+#### Step 3: Map to Tyson's Experience
+
+For each research finding, identify:
+- **Parallels in Tyson's profile:** Which past projects, roles, or skills relate?
+- **Transferable context:** How does this research deepen what Tyson has already done?
+- **Expected behaviors:** What does the research suggest the company values in this role?
+- **Knowledge gaps:** What might Tyson need to refresh or learn before discussing this topic?
+
+#### Step 4: Compile Research Report
+
+Create `research/[topic]-research.md` with:
+
+- **Overview** — High-level summary of the topic in simple, concise language
+- **Key Concepts** — Main ideas relevant to the role and company
+- **Industry Context** — How the topic fits into the broader industry landscape
+- **Company Relevance** — How this topic specifically applies to the company's business or role
+- **Connection to Your Experience** — Parallels with Tyson's profile and projects
+- **Expected Knowledge & Behaviors** — What the company likely expects someone in this role to understand
+- **Key Takeaways** — 3-5 core insights Tyson should be ready to discuss
+- **Glossary** — Industry/domain-specific terms and acronyms used in the research
+- **External References** — All links and sources used, organized by type
+
+**Language Guidelines:**
+- Sacrifice grammar for brevity and clarity
+- Use short sentences and simple words
+- Define technical terms as you introduce them
+- Avoid AI-sounding language (banned words from `constraints/content-guidelines.md`)
+- Write as if explaining to someone with relevant domain knowledge but new to this specific topic
+
+#### Step 5: Cross-Reference for Interview Prep
+
+When generating interview prep for the same job, incorporate findings from any prior research reports:
+- Use research insights to strengthen suggested answers
+- Reference research context when explaining expected knowledge
+- Build talking points around research findings and Tyson's experience mapping
+- Flag research topics as areas Tyson is well-prepared to discuss
+
+---
+
 ## Constraints and Quality Rules
 
 ### Always Follow These Constraint Documents
@@ -306,6 +387,11 @@ Never push content through that violates these constraints.
 Help me apply for [job URL or description]
 ```
 
+**Research:**
+```
+Research [topic] for [job folder name]
+```
+
 **Interview Prep:**
 ```
 Generate interview prep for [job folder name]
@@ -323,7 +409,7 @@ Rerun the sub-agent pipeline for [job folder name]
 
 ---
 
-## Workflow Summary
+## CV Generation Workflow Summary
 
 ### Application Workflow
 
@@ -367,8 +453,6 @@ Compile CV to PDF with Typst
 Final review and submit
 ```
 
----
-
 ## Notes for Execution
 
 - **Always start with Fact Checker and Think Like Tyson.** These are non-negotiable quality gates.
@@ -379,5 +463,29 @@ Final review and submit
 - **Be transparent about failures.** If a constraint is violated, explain which rule was broken and what needs to change.
 - **Respect Tyson's authentic voice.** Never oversell, never use banned words, never force corporate jargon.
 - **Document decisions.** When the Conflict Resolver and Change Composer make recommendations, explain why.
+
+---
+
+### Research Workflow Summary
+
+```
+User: "Research [topic] for [job folder name]"
+         ↓
+[Step 1] Locate job folder and validate context
+         ↓
+[Step 2] Conduct internet research on topic
+         ↓
+[Step 3] Map research to Tyson's existing experience
+         ↓
+[Step 4] Compile research report with findings
+         ↓
+[Output] research/[topic]-research.md
+    └─ Findings, glossary, external references
+         ↓
+[Note] Findings can be incorporated into interview prep
+         └─ "Generate interview prep for [job folder name]"
+```
+
+---
 
 Good luck getting Tyson hired! 🚀
