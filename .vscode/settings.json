@@ -1,0 +1,37 @@
+{
+  // LaTeX Workshop: compile CVs with xelatex (required by fontspec in cv.tex).
+  // The default recipe uses latexmk + pdflatex, which (a) isn't installed by BasicTeX
+  // and (b) can't handle fontspec. This points the build at xelatex directly.
+  "latex-workshop.latex.tools": [
+    {
+      "name": "xelatex",
+      "command": "xelatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "xelatex",
+      "tools": ["xelatex"]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "xelatex",
+
+  // Build on save (default true, set explicitly).
+  "latex-workshop.latex.autoBuild.run": "onSave",
+
+  // Keep job folders tidy: remove .aux/.log/.out etc. after a successful build, keep the PDF.
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind", "*.lof", "*.lot",
+    "*.out", "*.toc", "*.acn", "*.acr", "*.alg", "*.glg", "*.glo",
+    "*.gls", "*.fls", "*.fdb_latexmk", "*.synctex.gz", "*.nav",
+    "*.snm", "*.vrb", "*.xdv"
+  ]
+}

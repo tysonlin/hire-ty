@@ -6,7 +6,7 @@ Simulate the behaviour of an Applicant Tracking System (ATS) to score the curren
 
 ## Inputs
 
-1. The current CV draft (`cv.typ` source or extracted plain text).
+1. The current CV draft (`cv.tex` source or extracted plain text).
 2. The structured job description (`job-description.md` from the relevant `/jobs/` folder).
 
 ## Tasks
@@ -35,7 +35,7 @@ Verify the CV structure against common ATS parsing requirements:
 | No tables used for core content | Tables confuse many ATS parsers; use them only for Skills if unavoidable |
 | No text boxes or columns for body content | Single-column layout for experience and education |
 | No images or icons | ATS systems ignore or reject embedded images |
-| File will export to clean PDF | Typst produces ATS-friendly PDFs when using the standard template |
+| File will export to clean PDF | xelatex produces ATS-friendly PDFs when using the standard template |
 
 ### 4. Score and report
 

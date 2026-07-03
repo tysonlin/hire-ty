@@ -6,7 +6,7 @@ Review the CV draft and cover letter against Tyson's personal values, voice, and
 
 ## Inputs
 
-1. The current CV draft (`cv.typ` source or extracted plain text).
+1. The current CV draft (`cv.tex` source or extracted plain text).
 2. The cover letter draft.
 3. Tyson's personal guidelines (`/constraints/think-like-tyson.md`).
 4. Tyson's profile (`/data/tyson/profile.md`) for context on personal alignment notes.

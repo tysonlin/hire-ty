@@ -72,6 +72,6 @@ The following words, phrases, and patterns are **banned** from all output:
 
 ## Rule 5 — Structure and format
 
-- CVs must follow the Typst template defined in `/Typst.md`.
+- CVs must follow the LaTeX template defined in `/LaTeX.md`.
 - Cover letters must follow the email format template defined in `/subagents/tone-optimizer.md`.
 - Section headings in CVs must not be changed arbitrarily — any structural changes must go through the Conflict Resolver sub-agent.

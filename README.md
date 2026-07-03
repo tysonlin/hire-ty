@@ -2,7 +2,7 @@
 
 An agentic workflow repository to help Tyson Lin get hired — faster and better.
 
-The agent takes Tyson's professional profile, a job description, and produces a tailored CV (compiled to PDF via Typst) and a cover letter, all optimised through a pipeline of specialised sub-agents.
+The agent takes Tyson's professional profile, a job description, and produces a tailored CV (compiled to PDF via LaTeX/xelatex) and a cover letter, all optimised through a pipeline of specialised sub-agents.
 
 ---
 
@@ -27,7 +27,7 @@ hire-ty/
 │   ├── tone-optimizer.md
 │   ├── conflict-resolver.md
 │   └── change-composer.md
-├── Typst.md              # How to install Typst and compile CVs
+├── LaTeX.md              # How to install LaTeX and compile CVs
 └── README.md             # This file
 ```
 
@@ -39,26 +39,28 @@ hire-ty/
 
 Open `data/tyson/profile.md` and complete every section with accurate, factual information. This is the only source of truth the agent uses — everything generated will be based on what you put here.
 
-### 2. Install Typst (for compiling CVs to PDF)
+### 2. Install LaTeX (for compiling CVs to PDF)
 
-See **`Typst.md`** for full installation instructions for macOS, Windows, and Linux.
+See **`LaTeX.md`** for full installation instructions and the font notes. The Claude sandbox already has `xelatex`, so the agent compiles `cv.pdf` automatically; you only need a local install to compile on your own machine.
 
 Quick install:
 
 ```bash
-# macOS
-brew install typst
+# macOS (full distribution)
+brew install --cask mactex
 
-# Windows — download from https://github.com/typst/typst/releases
+# macOS (minimal), then add the packages used by the template
+brew install --cask basictex
+sudo tlmgr install fontspec geometry enumitem titlesec
 
 # Linux (Debian/Ubuntu)
-sudo apt install typst
+sudo apt install texlive-xetex texlive-fonts-extra
 ```
 
 Verify:
 
 ```bash
-typst --version
+xelatex --version
 ```
 
 ### 3. AI model / agent runner
@@ -114,13 +116,13 @@ And populate it with:
 | File | Contents |
 |------|----------|
 | `job-description.md` | Structured summary of the JD |
-| `cv.typ` | Typst source for your tailored CV - this should be generated per job position |
+| `cv.tex` | LaTeX source for your tailored CV - this should be generated per job position |
 | `cover-letter.md` | Tailored cover letter in email format |
 
 ### Step 3 — Review Initial Drafts
 
 The agent has now created:
-- `cv.typ` — Initial tailored CV (not yet optimized)
+- `cv.tex` — Initial tailored CV (not yet optimized)
 - `cover-letter.md` — Initial tailored cover letter (not yet optimized)
 
 You can review these drafts and either submit as-is, or proceed to Step 4 to optimize them through the sub-agent pipeline.
@@ -165,13 +167,13 @@ The Change Composer generates proposed files in the `analysis/` folder:
 
 | File | Purpose |
 |------|---------|
-| `analysis/proposed-cv.typ` | Full CV with recommended changes applied |
+| `analysis/proposed-cv.tex` | Full CV with recommended changes applied |
 | `analysis/proposed-cv.pdf` | Compiled PDF of proposed CV for visual review |
 | `analysis/proposed-cover-letter.md` | Full cover letter with recommended changes applied |
 | `analysis/change-summary.md` | Clear summary of what changed and why |
 
 Review these proposed files and decide:
-- **Approve** — Apply all changes to actual `cv.typ` and `cover-letter.md`
+- **Approve** — Apply all changes to actual `cv.tex` and `cover-letter.md`
 - **Request modifications** — Ask for specific iterations before applying
 - **Reject** — Keep current versions unchanged
 
@@ -182,10 +184,10 @@ Once you approve the changes:
 ```bash
 cd "jobs/<Company Name> - <Job Title> - <City>, <Country>"
 # Copy approved changes from proposed files
-cp analysis/proposed-cv.typ cv.typ
+cp analysis/proposed-cv.tex cv.tex
 cp analysis/proposed-cover-letter.md cover-letter.md
 # Recompile the final PDF
-typst compile cv.typ cv.pdf
+xelatex -interaction=nonstopmode cv.tex
 ```
 
 ---
@@ -285,7 +287,7 @@ Whenever your situation changes (new job, new skill, new certification), update 
 
 | Problem | Solution |
 |---------|----------|
-| `typst: command not found` | See the Installation section in `Typst.md` |
-| CV PDF looks wrong | Run `typst watch cv.typ cv.pdf` and check for errors in the terminal |
+| `xelatex: command not found` | See the Installation section in `LaTeX.md` |
+| CV PDF looks wrong | Recompile with `xelatex -interaction=nonstopmode cv.tex` and check `cv.log` for errors |
 | Agent invents facts | Remind the agent to follow `constraints/content-guidelines.md` Rule 1 |
 | Missing keywords in CV | Re-run the ATS Analyzer sub-agent with the updated draft |

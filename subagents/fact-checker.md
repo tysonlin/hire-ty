@@ -6,7 +6,7 @@ Verify that all information generated in the CV draft and cover letter is factua
 
 ## Inputs
 
-1. The current CV draft (`cv.typ` source or extracted plain text).
+1. The current CV draft (`cv.tex` source or extracted plain text).
 2. The cover letter draft.
 3. **Tyson's profile (`/data/tyson/profile.md`)** — This is the authoritative single source of truth for all biographical, professional, and achievement-related facts.
 4. Any supplementary files in `/data/tyson/` for additional context.

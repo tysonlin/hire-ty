@@ -10,7 +10,7 @@ Read the Conflict Resolver's recommendations and draft the complete proposed CV 
 
 You will be given:
 
-1. **Current CV** (`cv.typ`) — Typst source file for the actual CV
+1. **Current CV** (`cv.tex`) — LaTeX source file for the actual CV
 2. **Current cover letter** (`cover-letter.md`) — Actual cover letter being used
 3. **Conflict Resolver report** (`analysis/conflict-resolver-report.md`) — List of recommended changes with rationale
 
@@ -28,30 +28,31 @@ Read the Conflict Resolver report carefully. Extract:
 
 Organize by document (CV changes vs. cover letter changes).
 
-### Step 2: Draft `analysis/proposed-cv.typ`
+### Step 2: Draft `analysis/proposed-cv.tex`
 
-Take the current `cv.typ` file and apply all recommended CV changes from the Conflict Resolver report. 
+Take the current `cv.tex` file and apply all recommended CV changes from the Conflict Resolver report. 
 
 **Important:**
 - Apply changes exactly as recommended — no additional modifications
-- Preserve the original Typst structure and formatting
+- Preserve the original LaTeX structure and formatting
 - If a change involves adding a skill, metric, or bullet point, integrate it naturally into the existing flow
 - Maintain consistent voice and tone throughout
 - Do NOT comment out old text; replace it cleanly
 - Do NOT add `[TODO: ...]` placeholders
 
-Output the complete proposed CV file to `analysis/proposed-cv.typ`.
+Output the complete proposed CV file to `analysis/proposed-cv.tex`.
 
 ### Step 3: Compile to PDF
 
-Run Typst to compile the proposed CV:
+Run `xelatex` to compile the proposed CV (compile to a temp dir so build artifacts do not clutter the job folder, then copy the PDF back):
 
 ```bash
 cd <job-folder-path>
-typst compile "analysis/proposed-cv.typ" "analysis/proposed-cv.pdf"
+xelatex -interaction=nonstopmode -output-directory=/tmp/cvbuild "analysis/proposed-cv.tex"
+cp /tmp/cvbuild/proposed-cv.pdf "analysis/proposed-cv.pdf"
 ```
 
-Verify the PDF compiles without errors. If there are Typst errors, fix them in `proposed-cv.typ` and recompile.
+Verify the PDF compiles without errors and is one page (`pdfinfo analysis/proposed-cv.pdf | grep Pages`). If there are LaTeX errors, fix them in `proposed-cv.tex` and recompile. See `/LaTeX.md` for the template and troubleshooting.
 
 Output: **`analysis/proposed-cv.pdf`**
 
@@ -118,7 +119,7 @@ To approve these changes and apply them to the actual CV and cover letter, provi
 
 Create exactly these three files in the `analysis/` folder:
 
-1. **`analysis/proposed-cv.typ`** (full Typst source with changes applied)
+1. **`analysis/proposed-cv.tex`** (full LaTeX source with changes applied)
 2. **`analysis/proposed-cv.pdf`** (compiled PDF, ready to view)
 3. **`analysis/proposed-cover-letter.md`** (full cover letter with changes applied)
 4. **`analysis/change-summary.md`** (clear summary of changes)
@@ -131,7 +132,7 @@ Before finishing, verify:
 
 - [ ] All changes from Conflict Resolver report are applied
 - [ ] No additional changes made (stay faithful to recommendations)
-- [ ] Typst PDF compiles without errors
+- [ ] LaTeX PDF compiles without errors (and is one page)
 - [ ] Proposed files are complete (no partial content)
 - [ ] Change summary is clear and scannable
 - [ ] Tyson's voice is preserved
@@ -141,7 +142,7 @@ Before finishing, verify:
 
 ## Notes
 
-- **Non-destructive:** These proposed files are for review only. Do NOT modify the actual `cv.typ` or `cover-letter.md` files.
+- **Non-destructive:** These proposed files are for review only. Do NOT modify the actual `cv.tex` or `cover-letter.md` files.
 - **User approval:** Tyson will review these proposed files and decide whether to apply them.
 - **Transparency:** If you encounter contradictions or issues in the Conflict Resolver recommendations, highlight them in the change summary.
 - **Professional quality:** The `proposed-cv.pdf` should be visually correct and ready to view; the `proposed-cover-letter.md` should read smoothly and naturally.

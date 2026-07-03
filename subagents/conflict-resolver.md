@@ -4,7 +4,7 @@
 
 Act as the final arbiter for the CV and cover letter generation pipeline. However, this agent does **not** run first. The pipeline begins with critical quality gates (Fact Checker and Think Like Tyson) that validate the draft before any functional improvements are applied. 
 
-Once those gates pass, the Conflict Resolver receives all sub-agent reports, resolves contradictions, and produces the definitive document structure and content ready for the Typst compiler (CV) or direct output (cover letter).
+Once those gates pass, the Conflict Resolver receives all sub-agent reports, resolves contradictions, and produces the definitive document structure and content ready for the LaTeX compiler (CV) or direct output (cover letter).
 
 **Critical:** If Fact Checker returns 🛑 **BLOCKED**, the entire pipeline halts immediately — no further agents run, and the document is returned for corrections.
 
@@ -78,7 +78,7 @@ For every conflict identified, document:
 
 After resolving all conflicts, output the complete, final versions of:
 
-1. **CV content** (ready to be pasted into the Typst template — see `/Typst.md`).
+1. **CV content** (ready to be pasted into the LaTeX template — see `/LaTeX.md`).
 2. **Cover letter** (complete Markdown, email format as defined in `tone-optimizer.md`).
 
 Flag any remaining `[TODO: ...]` placeholders that still need Tyson's input before the documents are ready to send.
@@ -101,7 +101,7 @@ If any check fails, fix it before outputting.
 Return in this order:
 
 1. **Conflict resolution log** (table as described above).
-2. **Final CV content** (structured Markdown matching the Typst template sections).
+2. **Final CV content** (structured Markdown matching the LaTeX template sections).
 3. **Final cover letter** (complete Markdown in email format).
 4. **Outstanding TODOs** (list of items Tyson must review before sending).
 

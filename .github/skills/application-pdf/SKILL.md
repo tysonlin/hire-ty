@@ -1,12 +1,12 @@
 ---
 name: application-pdf
-description: "Combine a job application's CV (cv.typ) and cover letter (cover-letter.md) into a single application.pdf using Typst. CV on page 1, cover letter on page 2. Use when asked to combine, merge, or bundle CV and cover letter into one PDF, or when creating application.pdf for a job folder."
+description: "Combine a job application's CV (cv.tex) and cover letter (cover-letter.md) into a single application.pdf using LaTeX. CV on page 1, cover letter on page 2. Use when asked to combine, merge, or bundle CV and cover letter into one PDF, or when creating application.pdf for a job folder."
 argument-hint: "Path to job folder, e.g. jobs/Acme - Engineer - Sydney, Australia"
 ---
 
 # application-pdf
 
-Produces a single `application.pdf` by embedding `cv.typ` content and `cover-letter.md` content into one Typst source file (`application.typ`), compiling to a 2-page PDF.
+Produces a single `application.pdf` by embedding `cv.tex` content and `cover-letter.md` content into one LaTeX source file (`application.tex`), compiling to a 2-page PDF with `xelatex`.
 
 ## When to Use
 
@@ -18,45 +18,54 @@ Produces a single `application.pdf` by embedding `cv.typ` content and `cover-let
 
 ### 1. Read source files
 
-Read the current `cv.typ` and `cover-letter.md` from the job folder.
+Read the current `cv.tex` and `cover-letter.md` from the job folder.
 
-### 2. Create `application.typ`
+### 2. Create `application.tex`
 
-Create `application.typ` in the job folder using this structure:
+Create `application.tex` in the job folder. Reuse the CV preamble, put the CV body on page 1,
+then `\newpage` into a wider-margin cover-letter page:
 
-```typst
-// ── Page 1: CV ────────────────────────────────────────────────────────────────
+```latex
+% ── Preamble: copy verbatim from cv.tex (documentclass + all \usepackage + font + \titleformat) ──
 
-// Paste cv.typ content here verbatim (all #set rules, header, sections)
+\begin{document}
 
-// ── Page 2: Cover Letter ──────────────────────────────────────────────────────
+% ── Page 1: CV ──────────────────────────────────────────────────────────────
+\fontsize{9.5pt}{11.5pt}\selectfont
+% Paste the CV body from cv.tex here (header, \section* blocks, etc.)
 
-#pagebreak()
+% ── Page 2: Cover Letter ────────────────────────────────────────────────────
+\newpage
+\newgeometry{top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm}
+\fontsize{11pt}{15pt}\selectfont
+\setlength{\parskip}{0.8em}
+\setlength{\parindent}{0pt}
 
-#set page(margin: (top: 2.5cm, bottom: 2.5cm, left: 2.5cm, right: 2.5cm))
-#set text(size: 11pt)
-#set par(leading: 0.75em, spacing: 1.2em)
+% Cover letter body: one blank line between paragraphs.
+% Sign-off lines use \\ for hard line breaks.
 
-// Cover letter content in Typst markup:
-// - #v(1em) spacer before salutation
-// - Paragraphs separated by blank lines
-// - #v(1em) before sign-off block
-// - Sign-off lines use \ for line breaks
+\restoregeometry
+\end{document}
 ```
 
 Key rules for the cover letter page:
-- Convert markdown to Typst markup (no `**bold**`, no `#` headings)
-- Escape `@` in email addresses as `\@`
-- Use `\` (backslash) at end of line for hard line breaks
-- Use `#v(1em)` for vertical spacing between blocks
+- Convert markdown to LaTeX (no `**bold**`, no `#` headings)
+- Escape special characters: `\@` is not needed in LaTeX, but escape `&`, `%`, `#`, `_` as `\&`, `\%`, `\#`, `\_`
+- Use `\\` at end of line for hard line breaks (e.g. in the sign-off block)
+- Separate paragraphs with a blank line (with `\parskip` set, no manual spacing needed)
+- `\newgeometry` / `\restoregeometry` requires the `geometry` package (already loaded in the CV preamble)
 
 ### 3. Compile
 
 ```bash
 cd "<job-folder>"
-typst compile application.typ application.pdf
+xelatex -interaction=nonstopmode application.tex
 ```
 
 ### 4. Verify
 
-Confirm exit code 0 and that `application.pdf` exists in the job folder.
+Confirm `application.pdf` exists and is 2 pages:
+
+```bash
+pdfinfo application.pdf | grep Pages
+```

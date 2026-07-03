@@ -81,7 +81,7 @@ Inside, initialize:
 <Company Name> - <Job Title> - <City>, <Country>/
 ├── README.md                 # Workflow summary for this job
 ├── job-description.md        # Structured job description
-├── cv.typ                    # Will be populated after sub-agents run
+├── cv.tex                    # Will be populated after sub-agents run
 ├── cover-letter.md           # Will be populated after sub-agents run
 ├── research/                 # Research reports on role/company/domain topics
 │   └── [topic]-research.md   # Populated when research is requested
@@ -186,7 +186,7 @@ Execute the optimization pipeline on existing job application drafts. This valid
    - INPUT: Current CV and cover letter + Conflict Resolver report with proposed changes
    - TASK: Draft the proposed changes as complete file versions showing what CV and cover letter would look like if changes are applied, and compile the proposed CV to PDF
    - OUTPUT:
-     - **`analysis/proposed-cv.typ`** — Full CV content with all recommended changes applied (for user review)
+     - **`analysis/proposed-cv.tex`** — Full CV content with all recommended changes applied (for user review)
      - **`analysis/proposed-cv.pdf`** — Compiled PDF of the proposed CV (for user review)
      - **`analysis/proposed-cover-letter.md`** — Full cover letter with all recommended changes applied (for user review)
      - **`analysis/change-summary.md`** — Clear summary of what changed and why (for user decision-making)
@@ -202,9 +202,9 @@ Execute the optimization pipeline on existing job application drafts. This valid
   5. Impact Quantifier → `analysis/impact-quantification-[company].md`
   6. Tone Optimizer → `analysis/tone-optimization-[company].md`
   7. Conflict Resolver → `analysis/conflict-resolver-report.md` (recommendations only, no file modifications)
-  8. Change Composer → `analysis/proposed-cv.typ`, `analysis/proposed-cv.pdf`, `analysis/proposed-cover-letter.md`, `analysis/change-summary.md`
+  8. Change Composer → `analysis/proposed-cv.tex`, `analysis/proposed-cv.pdf`, `analysis/proposed-cover-letter.md`, `analysis/change-summary.md`
 - All outputs go **directly into `analysis/` subfolder**
-- Conflict Resolver and Change Composer do NOT modify actual `cv.typ` or `cover-letter.md` files
+- Conflict Resolver and Change Composer do NOT modify actual `cv.tex` or `cover-letter.md` files
 - User reviews proposed changes before any files are modified
 - The `analysis/` folder is for reference, audit trail, and change proposals only
 
@@ -215,8 +215,8 @@ Execute the optimization pipeline on existing job application drafts. This valid
 Once the Change Composer generates the proposed files:
 
 - Review `analysis/change-summary.md` to understand what would change
-- Review `analysis/proposed-cv.pdf` for visual layout and `analysis/proposed-cv.typ` / `analysis/proposed-cover-letter.md` for full content
-- Compare with current `cv.typ` and `cover-letter.md` to verify changes
+- Review `analysis/proposed-cv.pdf` for visual layout and `analysis/proposed-cv.tex` / `analysis/proposed-cover-letter.md` for full content
+- Compare with current `cv.tex` and `cover-letter.md` to verify changes
 - Decide: approve changes, request modifications, or keep current versions
 
 #### After Pipeline: Apply Approved Changes (If User Approves)
@@ -224,13 +224,13 @@ Once the Change Composer generates the proposed files:
 If Tyson approves the proposed changes:
 
 ```bash
-cp "jobs/<Company Name> - <Job Title> - <City>, <Country>/analysis/proposed-cv.typ" \
-   "jobs/<Company Name> - <Job Title> - <City>, <Country>/cv.typ"
+cp "jobs/<Company Name> - <Job Title> - <City>, <Country>/analysis/proposed-cv.tex" \
+   "jobs/<Company Name> - <Job Title> - <City>, <Country>/cv.tex"
 cp "jobs/<Company Name> - <Job Title> - <City>, <Country>/analysis/proposed-cover-letter.md" \
    "jobs/<Company Name> - <Job Title> - <City>, <Country>/cover-letter.md"
 ```
 
-Then compile PDF: `typst compile cv.typ cv.pdf`
+Then compile PDF: `xelatex -interaction=nonstopmode cv.tex` (produces `cv.pdf`)
 
 #### After Pipeline: Final Review
 
@@ -376,7 +376,7 @@ Never push content through that violates these constraints.
 | `subagents/*.md` | Instructions for each specialized agent in the pipeline |
 | `jobs/*/job-description.md` | Structured job posting for each application |
 | `jobs/*/analysis/*.md` | Output from each sub-agent for that job |
-| `Typst.md` | Instructions for compiling CVs to PDF |
+| `LaTeX.md` | Instructions for compiling CVs to PDF |
 
 ---
 
@@ -444,11 +444,11 @@ User: "Run the sub-agent pipeline for [job folder name]"
 Review proposed changes in analysis/ folder
          ↓
     User decision:
-    ├─ Approve → Apply changes to cv.typ and cover-letter.md
+    ├─ Approve → Apply changes to cv.tex and cover-letter.md
     ├─ Request modifications → Iterate with agents
     └─ Reject → Keep current versions
          ↓
-Compile CV to PDF with Typst
+Compile CV to PDF with LaTeX (xelatex)
          ↓
 Final review and submit
 ```
@@ -458,7 +458,7 @@ Final review and submit
 - **Always start with Fact Checker and Think Like Tyson.** These are non-negotiable quality gates.
 - **If Fact Checker halts:** Do not run any other agents. Return immediately for profile/document corrections.
 - **If Think Like Tyson halts:** Do not proceed to functional agents. Fix voice and structure first.
-- **Conflict Resolver only recommends changes.** It does NOT modify cv.typ or cover-letter.md. Changes are drafted by Change Composer for user approval.
+- **Conflict Resolver only recommends changes.** It does NOT modify cv.tex or cover-letter.md. Changes are drafted by Change Composer for user approval.
 - **Change Composer drafts proposed versions and PDF.** User reviews in the analysis/ folder before approving.
 - **Be transparent about failures.** If a constraint is violated, explain which rule was broken and what needs to change.
 - **Respect Tyson's authentic voice.** Never oversell, never use banned words, never force corporate jargon.
