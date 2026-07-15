@@ -52,6 +52,14 @@ The following words, phrases, and patterns are **banned** from all output:
 - Bullet points that start with "Responsible for" (prefer action verbs)
 - Oxford-comma abuse that obscures meaning
 
+### Banned sentence patterns
+- Colon-enumeration sentences of the form `<main idea>: <specifics>, <specifics>, and <specifics>.`
+  Break these into two separate sentences: state the main idea, then give the specifics as their own sentence.
+  - ❌ "That work showed me what happens when infrastructure opens up: services reach more people, faster, and in more contexts."
+  - ✅ "That work showed me what happens when infrastructure opens up. Services reach more people, faster."
+- The same applies when the colon is swapped for a comma chain (`<main idea>, <specific>, <specific>, and <specific>.`) — do not use comma splices to smuggle the list back in.
+- Exception: colons in labeled lists are fine (e.g. CV skill categories like "**Databases:** Redis, PostgreSQL").
+
 ### Banned notation & formatting
 - Emoji in CVs or cover letters
 - Bold text used for emphasis inside paragraphs (bold is for headings/labels only)
